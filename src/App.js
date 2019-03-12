@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import AddressBook  from './AdressBook/AdressBook';
+import AddressBook  from './AddressBook/AddressBook';
+import { Container} from 'reactstrap';
 
 import './App.css';
 
@@ -43,19 +44,18 @@ class App extends Component {
         Birthday: '9/10/1975',
         Telephone: '200-707-8670'
       }
-    ]
+    ],
+    showAddressBook : false
   };
 
   render() {
     return (
       <div className="App">
-        <AddressBook 
-        firstName = {this.state.addressBook[0].FirstName}
-        lastName = {this.state.addressBook[0].LastName}
-        birthday = {this.state.addressBook[0].Birthday}
-        telephone = {this.state.addressBook[0].Telephone}>
+        <Container>
+          <h1>React Address Book</h1>
+        <AddressBook></AddressBook> 
+        </Container>
         
-        </AddressBook>
       </div>
     );
   }

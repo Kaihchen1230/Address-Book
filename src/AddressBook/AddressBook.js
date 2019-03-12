@@ -9,6 +9,7 @@ const addressBook = (props) => {
             <p>the birthday is {props.birthday}</p>
             <p>the telephone is {props.telephone}</p>
         </div>
+        
     )
 };
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {generate} from 'randomstring';
 import AddressBook  from './AddressBook/AddressBook';
 import Container from 'react-bootstrap/Container';
-import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
+import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 import './App.css';
@@ -55,6 +55,7 @@ class App extends Component {
       }
     ],
     showAddressBook : false,
+
     
   };
 
@@ -90,12 +91,20 @@ class App extends Component {
       <div className="App">
         <Container>
           <h1>React Addressbook</h1>
-          <Button onClick = {this.troggleAddressboook}>
+          <Button variant = "primary" onClick = {this.troggleAddressboook}>
             {!this.state.showAddressBook ? 'Show Addressbook' : 'Hide Addressbook'}
           </Button>
           {address_book}
+
+          
         </Container>
         
+        <Form>
+        <Form.Group>
+          <Form.Label>First Name</Form.Label>
+          <Form.Control type="text" placeholder="Enter your first name" />
+        </Form.Group>
+        </Form>
       </div>
     );
   }

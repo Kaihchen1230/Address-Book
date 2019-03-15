@@ -3,7 +3,9 @@ import {generate} from 'randomstring';
 import AddressBook  from './AddressBook/AddressBook';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Emoji from 'react-emoji-render';
 
 import './App.css';
 
@@ -54,57 +56,114 @@ class App extends Component {
         Telephone: '200-707-8670'
       }
     ],
-    showAddressBook : false,
-
-    
+    newFirstName: '',
+    newLastName: '',
+    newBirthday: '',
+    newTelephone: '',
+    search : ''
   };
 
-  troggleAddressboook = () => {
-    const doesShow = this.state.showAddressBook;
+  addContactHandler = (event) => {
+    event.preventDefault();
+
+    let newContact = {
+      id: generate(10),
+      FirstName: this.state.newFirstName,
+      LastName: this.state.newLastName,
+      Birthday: this.state.newBirthday,
+      Telephone: this.state.newTelephone
+    };
+
+    // if(!this.state.newFirstName || !this.state.newLastName || !this.state.newBirthday || !this.state.newTelephone){
+    //   alert('you did not complete all of the flieds!!');
+    // }
+
     this.setState({
-      showAddressBook : !doesShow
+      addressBook: [...this.state.addressBook, newContact]
     })
+    this.setState({
+      newFirstName: '',
+      newLastName: '',
+      newBirthday: '',
+      newTelephone: ''
+    });
   }
 
   render() {
 
-    let address_book = null;
-    if(this.state.showAddressBook){
-      address_book = (
-        <Container>
-          {
-            this.state.addressBook.map((element,index) => {
-              return <AddressBook
-                        firstName = {element.FirstName}
-                        lastName = {element.LastName}
-                        birthday = {element.Birthday}
-                        telephone = {element.Telephone}
-                        key = {element.id}>
-                      </AddressBook>
-            })
-          }
-        </Container>
-      );
-    }
-
+  
     return (
       <div className="App">
         <Container>
-          <h1>React Addressbook</h1>
-          <Button variant = "primary" onClick = {this.troggleAddressboook}>
-            {!this.state.showAddressBook ? 'Show Addressbook' : 'Hide Addressbook'}
-          </Button>
-          {address_book}
-
+          <header>
+            <h1>React Addressbook</h1>
+          </header>
           
-        </Container>
-        
-        <Form>
-        <Form.Group>
-          <Form.Label>First Name</Form.Label>
-          <Form.Control type="text" placeholder="Enter your first name" />
-        </Form.Group>
+          <input 
+            id = "searchBar" 
+            type="text" 
+            placeholder = "Search"
+            value = {this.state.search}
+            onChange = {(e) => this.setState({search : e.target.value})}
+          />
+          
+          <AddressBook
+            addressbook = {this.state.addressBook}
+            
+          ></AddressBook>
+          
+          <br/>
+          {/* display form for user to enter new contact information */}
+          <Form onSubmit = {this.addContactHandler}> 
+            <h2>Add New Contact Information</h2>
+          <Form.Row>
+            <Col>
+              <Form.Control 
+                type = "text" 
+                placeholder="First Name" 
+                value = {this.state.newFirstName}
+                onChange = {(e) => this.setState({newFirstName : e.target.value})}
+              />
+            </Col>
+            <Col>
+              <Form.Control 
+                type = "text" 
+                placeholder = "Last Name"
+                value = {this.state.newLastName}
+                onChange = {(e) => this.setState({newLastName : e.target.value})}
+              />
+            </Col>
+          </Form.Row>
+          <br/>
+          <Form.Row>
+            <Col>
+              <Form.Control 
+                type = "date" 
+                placeholder="Birthday" 
+                value = {this.state.newBirthday}
+                onChange = {(e) => this.setState({newBirthday : e.target.value})}
+              />
+            </Col>
+            <Col>
+              <Form.Control 
+                type = "tel" 
+                placeholder = "Telephone"
+                value = {this.state.newTelephone}
+                onChange = {(e) => this.setState({newTelephone : e.target.value})}
+              />
+            </Col>
+          </Form.Row> 
+          <br/>  
+          <Form.Row>
+              <Col>
+              <Button variant = "primary" type = "submit" onClick = {this.formChecker}>
+              <Emoji text=":package: Add New Contact" />
+              </Button>
+              </Col>
+             
+          </Form.Row>       
         </Form>
+        </Container>
       </div>
     );
   }

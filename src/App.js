@@ -6,6 +6,8 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Emoji from 'react-emoji-render';
+import Modal from 'react-bootstrap/Modal';
+
 
 import './App.css';
 
@@ -56,12 +58,15 @@ class App extends Component {
         Telephone: '200-707-8670'
       }
     ],
+    show: false,
     newFirstName: '',
     newLastName: '',
     newBirthday: '',
     newTelephone: '',
-    search : ''
+    searchWord: '',
+    selectedId: ''
   };
+
 
   addContactHandler = (event) => {
     event.preventDefault();
@@ -74,14 +79,8 @@ class App extends Component {
       Telephone: this.state.newTelephone
     };
 
-    // if(!this.state.newFirstName || !this.state.newLastName || !this.state.newBirthday || !this.state.newTelephone){
-    //   alert('you did not complete all of the flieds!!');
-    // }
-
     this.setState({
-      addressBook: [...this.state.addressBook, newContact]
-    })
-    this.setState({
+      addressBook: [...this.state.addressBook, newContact],
       newFirstName: '',
       newLastName: '',
       newBirthday: '',
@@ -89,28 +88,78 @@ class App extends Component {
     });
   }
 
-  render() {
+  handleClose = () => {
+    this.setState({ show: false });
+  }
 
-  
+  handleShow = (id, e) => {
+     
+    this.setState({ 
+      show: true,
+      selectedId : id
+    });
+    console.log(`1111this is the id: ${id}`)
+  }
+
+
+  searchHander = () => {
+    let contactList = this.state.addressBook;
+
+    // console.log(this.state.searchWord);
+    let keyWord = new RegExp(this.state.searchWord, 'i'); 
+    // console.log(reg);
+    contactList = contactList.filter(
+        (contact) =>   
+        keyWord.test(contact.FirstName) || keyWord.test(contact.LastName) || keyWord.test(contact.Birthday) || keyWord.test(contact.Telephone)
+        
+      );
+    console.log(contactList);
+    return contactList;
+  }
+
+  deleteHander = () => {
+    let contactList = [...this.state.addressBook];
+    
+
+  }
+
+
+  render() {
+    
     return (
       <div className="App">
         <Container>
           <header>
             <h1>React Addressbook</h1>
           </header>
+          <Modal show={this.state.show} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Modal heading</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Are you sure about this?</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleClose}>
+              Close
+            </Button>
+            <Button variant="primary">
+              Delete
+            </Button>
+          </Modal.Footer>
+        </Modal>
           
           <input 
             id = "searchBar" 
             type="text" 
             placeholder = "Search"
-            value = {this.state.search}
-            onChange = {(e) => this.setState({search : e.target.value})}
+            value = {this.state.searchWord}
+            onChange = {(e) => this.setState({searchWord : e.target.value})}
           />
           
           <AddressBook
-            addressbook = {this.state.addressBook}
-            
+            addressbook = {this.searchHander()}
+            delete = {this.handleShow}
           ></AddressBook>
+        
           
           <br/>
           {/* display form for user to enter new contact information */}

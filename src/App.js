@@ -104,7 +104,7 @@ class App extends Component {
 
   searchHander = () => {
     let contactList = this.state.addressBook;
-
+    console.log(`this is contactList: ${contactList}`);
     // console.log(this.state.searchWord);
     let keyWord = new RegExp(this.state.searchWord, 'i'); 
     // console.log(reg);
@@ -117,8 +117,15 @@ class App extends Component {
     return contactList;
   }
 
-  deleteHander = () => {
-    let contactList = [...this.state.addressBook];
+  deleteHander = (key, e) => {
+    let contactList = [...this.state.addressBook];  
+    let deleteIndex = contactList.findIndex((item) => item.id === key);
+    contactList.splice(deleteIndex, 1);
+    this.setState({
+      addressBook : contactList,
+      selectedId : '',
+      show: !this.state.show
+    });
     
 
   }
@@ -137,11 +144,12 @@ class App extends Component {
             <Modal.Title>Modal heading</Modal.Title>
           </Modal.Header>
           <Modal.Body>Are you sure about this?</Modal.Body>
+         
           <Modal.Footer>
-            <Button variant="secondary" onClick={this.handleClose}>
+            <Button variant="secondary">
               Close
             </Button>
-            <Button variant="primary">
+            <Button variant="primary" onClick={this.deleteHander.bind(null, this.state.selectedId)}>
               Delete
             </Button>
           </Modal.Footer>

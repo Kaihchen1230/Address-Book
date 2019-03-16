@@ -146,7 +146,7 @@ class App extends Component {
           <Modal.Body>Are you sure about this?</Modal.Body>
          
           <Modal.Footer>
-            <Button variant="secondary">
+            <Button variant="secondary" onClick = {this.handleClose}>
               Close
             </Button>
             <Button variant="primary" onClick={this.deleteHander.bind(null, this.state.selectedId)}>
